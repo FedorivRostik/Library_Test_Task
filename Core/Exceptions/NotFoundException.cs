@@ -1,4 +1,5 @@
 ﻿namespace Core.Exceptions;
+
 [Serializable]
 public class NotFoundException : Exception
 {

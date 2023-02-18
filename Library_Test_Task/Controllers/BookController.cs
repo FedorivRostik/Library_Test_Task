@@ -1,6 +1,7 @@
 ﻿using Core.Dtos.Books;
 using Core.Interfaces.Services;
 using Core.Models;
+using Library_Test_Task.FilterAttributes;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library_Test_Task.Controllers;
@@ -9,8 +10,8 @@ namespace Library_Test_Task.Controllers;
 public class BookController : ControllerBase
 {
     private readonly IBookService _bookService;
-
-    public BookController(IBookService bookService)
+    private readonly IConfiguration _configuration;
+    public BookController(IBookService bookService, IConfiguration configuration)
     {
         _bookService = bookService;
     }
@@ -35,4 +36,11 @@ public class BookController : ControllerBase
         var books = await _bookService.GetBookAsync(id);
         return Ok(books);
     }
+
+    [HttpDelete("books/{id:int:min(1)}")]
+    [CheckSecretKeyAttribute]
+    public void Delete([FromRoute] int id, [FromQuery] string secret)
+    {
+        Ok();
+    }    
 }
