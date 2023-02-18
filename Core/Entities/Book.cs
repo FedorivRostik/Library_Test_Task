@@ -1,9 +1,10 @@
 ﻿
+using Core.Entities;
+
 namespace Core.Entites;
 
-public class Book
+public class Book: BaseEntity
 {
-    public int Id { get; set; }
     public string Title { get; set; } = string.Empty;
     public string Cover { get; set; } = string.Empty;
     public string Content { get; set; } = string.Empty;

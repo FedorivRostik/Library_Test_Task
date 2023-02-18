@@ -9,7 +9,7 @@ public class CheckSecretKeyAttribute : Attribute, IActionFilter
 
     public void OnActionExecuted(ActionExecutedContext context)
     {
-        if (context.HttpContext.Request == null)
+        if (context.HttpContext.Request is null)
         {
             context.Result = new BadRequestResult();
         }
@@ -17,12 +17,15 @@ public class CheckSecretKeyAttribute : Attribute, IActionFilter
 
     public void OnActionExecuting(ActionExecutingContext context)
     {
-        var sercretRequest = context.HttpContext.Request.Query["secret"];
-
-        var sercretConf = Configuration!.GetSection("SecretKey").Value.ToString();
-        if (!string.Equals(sercretRequest, sercretConf, StringComparison.Ordinal))
+        if (!string.IsNullOrEmpty(context.HttpContext.Request.Query["secret"]))
         {
-            context.Result = new BadRequestResult();
+            var sercretRequest = context.HttpContext.Request.Query["secret"];
+
+            var sercretConf = Configuration!.GetSection("SecretKey").Value.ToString();
+            if (!string.Equals(sercretRequest, sercretConf, StringComparison.Ordinal))
+            {
+                context.Result = new BadRequestResult();
+            }
         }
     }
 }

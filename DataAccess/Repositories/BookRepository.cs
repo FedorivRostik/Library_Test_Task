@@ -51,6 +51,16 @@ public class BookRepository : IBookRepository
         return book!;
     }
 
+    public async Task<int> DeleteBookAsync(Book book)
+    {
+        _libraryContext.Remove(book);
+
+        await _libraryContext.SaveChangesAsync();
+
+        return book.Id;
+
+    }
+
     private void ApplySort(ref IQueryable<Book> books, string orderByQueryString)
     {
         if (string.IsNullOrWhiteSpace(orderByQueryString))
@@ -94,6 +104,4 @@ public class BookRepository : IBookRepository
         var filter = filterQueryString.Split(" ")[0];
         books = books.Where(x => x.Genre.Equals(filter, StringComparison.InvariantCultureIgnoreCase));
     }
-
-
 }

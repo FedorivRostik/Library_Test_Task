@@ -1,6 +1,7 @@
 ﻿using Application.CustomMappers.Interfaces;
 using Core.Dtos.Books;
 using Core.Entites;
+using Core.Entities;
 using Core.Exceptions;
 using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
@@ -52,12 +53,28 @@ public class BookService : IBookService
     {
         var book = await _bookRepository.GetBookAsync(id);
 
-        if (book is null)
-        {
-            throw new NotFoundException($"no book with id:{id}");
-        }
+        IsNull<Book>(book, id);
 
         var bookBaseDtoWithReviewBaseDto = _bookToBookBaseDtoWithReviewBaseDto.Map(book);
         return bookBaseDtoWithReviewBaseDto;
+    }
+
+    public async Task<int> DeleteBookAsync(int id)
+    {
+        var book = await _bookRepository.GetBookAsync(id);
+
+        IsNull<Book>(book, id);
+
+        var deletedId = await _bookRepository.DeleteBookAsync(book);
+
+        return deletedId;
+    }
+
+    private void IsNull<T>(T obj, int id) where T : BaseEntity
+    {
+        if (obj is null)
+        {
+            throw new NotFoundException($"No {typeof(T).Name} with id: {id}.");
+        }
     }
 }

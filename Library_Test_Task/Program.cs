@@ -3,7 +3,6 @@ using Application.CustomMappers;
 using DataAccess;
 using Library_Test_Task.Middleware;
 using Library_Test_Task.Providers;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;

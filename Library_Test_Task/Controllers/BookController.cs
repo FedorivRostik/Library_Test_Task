@@ -3,15 +3,16 @@ using Core.Interfaces.Services;
 using Core.Models;
 using Library_Test_Task.FilterAttributes;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Newtonsoft.Json.Linq;
 
 namespace Library_Test_Task.Controllers;
 [Route("api/")]
 [ApiController]
-public class BookController : ControllerBase
+public class ApiController : ControllerBase
 {
     private readonly IBookService _bookService;
-    private readonly IConfiguration _configuration;
-    public BookController(IBookService bookService, IConfiguration configuration)
+    public ApiController(IBookService bookService, IConfiguration configuration)
     {
         _bookService = bookService;
     }
@@ -39,8 +40,12 @@ public class BookController : ControllerBase
 
     [HttpDelete("books/{id:int:min(1)}")]
     [CheckSecretKeyAttribute]
-    public void Delete([FromRoute] int id, [FromQuery] string secret)
+    public async Task<ActionResult<string>> Delete([FromRoute] int id, [BindRequired,FromQuery] string secret)
     {
-        Ok();
+        var deletedId = await _bookService.DeleteBookAsync(id);
+
+        var responseString = new JProperty("id", deletedId).ToString();
+
+        return Ok(responseString);
     }    
 }

@@ -8,4 +8,5 @@ public interface IBookRepository
     public Task<List<Book>> GetAllBooksAsync(QueryParameters queryParameters);
     public Task<List<Book>> GetAllRecomendedBooksAsync(QueryParameters queryParameters);
     public Task<Book> GetBookAsync(int id);
+    public Task<int> DeleteBookAsync(Book book);
 }

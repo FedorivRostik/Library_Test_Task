@@ -17,10 +17,10 @@ public class ConfigurationModelProvider : IApplicationModelProvider
     {
         foreach (var controllerModel in context.Result.Controllers)
         {
-            // pass the depencency to controller attibutes
-            controllerModel.Attributes
-                .OfType<CheckSecretKeyAttribute>().ToList()
-                .ForEach(a => a.Configuration = _configuration);
+          /*  // pass the depencency to controller attibutes
+          //  controllerModel.Attributes
+          //      .OfType<CheckSecretKeyAttribute>().ToList()
+          //      .ForEach(a => a.Configuration = _configuration);*/
 
             // pass the dependency to action attributes
             controllerModel.Actions.SelectMany(a => a.Attributes)

@@ -1,10 +1,11 @@
 ﻿#nullable disable
 
+using Core.Entities;
+
 namespace Core.Entites;
 
-public class Rating
+public class Rating: BaseEntity
 {
-    public int Id { get; set; }
     public int Score { get; set; }
 
     public int BookId { get; set; }
