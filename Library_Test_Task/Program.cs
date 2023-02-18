@@ -1,6 +1,7 @@
 using Application;
 using Application.CustomMappers;
 using DataAccess;
+using Library_Test_Task.Middleware;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,8 @@ builder.Services.AddDbContext<LibraryContext>(o => o.UseInMemoryDatabase("Librar
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.AddApplicationMiddleware();
+
 if (app.Environment.IsDevelopment())
 {
     using (var scope = app.Services.CreateScope())
