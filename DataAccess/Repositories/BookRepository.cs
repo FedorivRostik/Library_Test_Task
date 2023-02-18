@@ -1,5 +1,6 @@
 ﻿using Core.Entites;
 using Core.Interfaces.Repositories;
+using Core.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using System.Reflection;
@@ -15,13 +16,29 @@ public class BookRepository : IBookRepository
         _libraryContext = libraryContext;
     }
 
-    public async Task<List<Book>> GetAllBooks(string orderBy)
+    public async Task<List<Book>> GetAllBooksAsync(QueryParameters queryParameters)
     {
         var books = _libraryContext.Books.AsQueryable();
 
-        ApplySort(ref books, orderBy);
+        ApplySort(ref books, queryParameters.Order!);
 
-        return await books.Include(b => b.Reviews).Include(b => b.Ratings).ToListAsync();
+        return await books
+            .Include(b => b.Reviews)
+            .Include(b => b.Ratings)
+            .ToListAsync();
+    }
+
+    public async Task<List<Book>> GetAllRecomendedBooksAsync(QueryParameters queryParameters)
+    {
+        var books = _libraryContext.Books.AsQueryable();
+
+        ApplFilter(ref books, queryParameters.Genre!);
+        ApplySort(ref books, queryParameters.Order!.Split(" ")[0]);
+
+        return await books
+            .Include(b => b.Reviews)
+            .Include(b => b.Ratings)
+            .ToListAsync();
     }
 
     private void ApplySort(ref IQueryable<Book> books, string orderByQueryString)
@@ -56,5 +73,15 @@ public class BookRepository : IBookRepository
             return;
         }
         books = books.OrderBy(orderQuery);
+    }
+
+    private void ApplFilter(ref IQueryable<Book> books, string filterQueryString)
+    {
+        if (string.IsNullOrWhiteSpace(filterQueryString))
+        {          
+            return;
+        }
+        var filter = filterQueryString.Split(" ")[0];
+        books = books.Where(x=>x.Genre.Equals(filter, StringComparison.InvariantCultureIgnoreCase));
     }
 }

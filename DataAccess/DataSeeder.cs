@@ -82,6 +82,7 @@ public static class DataSeeder
           new Review {Id = 8, BookId=1, Message="Message8", Reviewer="Reviewer8"},
           new Review {Id = 9, BookId=1, Message="Message9", Reviewer="Reviewer9"},
           new Review {Id = 10, BookId=1, Message="Message10", Reviewer="Reviewer10"},
+          new Review {Id = 11, BookId=1, Message="Message11", Reviewer="Reviewer11"},
         });
     }
 }
