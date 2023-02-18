@@ -3,17 +3,17 @@ using Core.Dtos.Books;
 using Core.Entites;
 
 namespace Application.CustomMappers.BookMappers;
-public class BooksBaseMapper : IEnumerableDtoMapper<IEnumerable<Book>, IEnumerable<BookBase>>
+public class BooksBaseListMapper : IEnumerableDtoMapper<IEnumerable<Book>, IEnumerable<BookBaseDto>>
 {
-    public IEnumerable<BookBase> Map(IEnumerable<Book> source)
+    public IEnumerable<BookBaseDto> Map(IEnumerable<Book> source)
     {
-        var bookBaseDtos = source.Select(GetExceptionEntityReadViewModel).ToList();
+        var bookBaseDtos = source.Select(MapFromTo).ToList();
         return bookBaseDtos;
     }
 
-    private BookBase GetExceptionEntityReadViewModel(Book book)
+    private BookBaseDto MapFromTo(Book book)
     {
-        var exceptionViewModel = new BookBase()
+        var exceptionViewModel = new BookBaseDto()
         {
             Id = book.Id,
             Title = book.Title,

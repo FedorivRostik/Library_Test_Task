@@ -20,7 +20,7 @@ public class BookRepository : IBookRepository
     {
         var books = _libraryContext.Books.AsQueryable();
 
-        ApplySort(ref books, queryParameters.Order!);
+        ApplySort(ref books, queryParameters.order!);
 
         return await books
             .Include(b => b.Reviews)
@@ -32,13 +32,23 @@ public class BookRepository : IBookRepository
     {
         var books = _libraryContext.Books.AsQueryable();
 
-        ApplFilter(ref books, queryParameters.Genre!);
-        ApplySort(ref books, queryParameters.Order!.Split(" ")[0]);
+        ApplFilter(ref books, queryParameters.genre!);
+        ApplySort(ref books, queryParameters.order!.Split(" ")[0]);
 
         return await books
             .Include(b => b.Reviews)
             .Include(b => b.Ratings)
             .ToListAsync();
+    }
+
+    public async Task<Book> GetBookAsync(int id)
+    {
+        var book = await _libraryContext.Books
+            .Include(b => b.Reviews)
+            .Include(b => b.Ratings)
+            .FirstOrDefaultAsync(b => b.Id == id);
+
+        return book!;
     }
 
     private void ApplySort(ref IQueryable<Book> books, string orderByQueryString)
@@ -78,10 +88,12 @@ public class BookRepository : IBookRepository
     private void ApplFilter(ref IQueryable<Book> books, string filterQueryString)
     {
         if (string.IsNullOrWhiteSpace(filterQueryString))
-        {          
+        {
             return;
         }
         var filter = filterQueryString.Split(" ")[0];
-        books = books.Where(x=>x.Genre.Equals(filter, StringComparison.InvariantCultureIgnoreCase));
+        books = books.Where(x => x.Genre.Equals(filter, StringComparison.InvariantCultureIgnoreCase));
     }
+
+
 }
