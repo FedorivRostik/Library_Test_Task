@@ -1,6 +1,5 @@
 ﻿using Core.Entites;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.CompilerServices;
 
 namespace DataAccess;
 
@@ -45,15 +44,15 @@ public static class DataSeeder
 
         modelBuilder.Entity<Book>().HasData(new[]
         {
-            new Book {Id = 1, Title = "Title1", Cover = cover, Content=content, Author="Author1",Genre="horror"},
-            new Book {Id = 2, Title = "Title2", Cover = cover, Content=content, Author="Author2",Genre="horror"},
-            new Book {Id = 3, Title = "Title3", Cover = cover, Content=content, Author="Author3",Genre="horror"},
-            new Book {Id = 4, Title = "Title4", Cover = cover, Content=content, Author="Author4",Genre="horror"},
-            new Book {Id = 5, Title = "Title5", Cover = cover, Content=content, Author="Author5",Genre="horror"},
-            new Book {Id = 6, Title = "Title6", Cover = cover, Content=content, Author="Author6",Genre="romantic"},
-            new Book {Id = 7, Title = "Title7", Cover = cover, Content=content, Author="Author7",Genre="romantic"},
-            new Book {Id = 8, Title = "Title8", Cover = cover, Content=content, Author="Author8",Genre="romantic"},
-            new Book {Id = 9, Title = "Title9", Cover = cover, Content=content, Author="Author9",Genre="romantic"},
+            new Book {Id = 1, Title = "Carrie", Cover = cover, Content=content, Author="Stephen King",Genre="horror"},
+            new Book {Id = 2, Title = "'Salem's Lot", Cover = cover, Content=content, Author="Stephen King",Genre="horror"},
+            new Book {Id = 3, Title = "The Shining", Cover = cover, Content=content, Author="Stephen King",Genre="horror"},
+            new Book {Id = 4, Title = "Rage", Cover = cover, Content=content, Author="Stephen King",Genre="horror"},
+            new Book {Id = 5, Title = "The Stand", Cover = cover, Content=content, Author="Stephen King",Genre="horror"},
+            new Book {Id = 6, Title = "The Long Walk", Cover = cover, Content=content, Author="Stephen King",Genre="romantic"},
+            new Book {Id = 7, Title = "HARRY POTTER AND THE PHILOSOPHER’S STONE", Cover = cover, Content=content, Author="J.K. Rowling",Genre="romantic"},
+            new Book {Id = 8, Title = "HARRY POTTER AND THE CHAMBER OF SECRETS", Cover = cover, Content=content, Author="J.K. Rowling",Genre="romantic"},
+            new Book {Id = 9, Title = "HARRY POTTER AND THE PRISONER OF AZKABAN", Cover = cover, Content=content, Author="J.K. Rowling",Genre="romantic"},
             new Book {Id = 10, Title = "Title10", Cover = cover, Content=content, Author="Author10",Genre="romantic"}
         });
     }

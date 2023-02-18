@@ -22,9 +22,9 @@ internal class ReviewConfiguration : IEntityTypeConfiguration<Review>
             .IsRequired();
 
 
-        builder.HasOne(b=>b.Book)
-            .WithMany(b=>b.Reviews)
-            .HasForeignKey(b=>b.Book.Id)
+        builder.HasOne(b => b.Book)
+            .WithMany(b => b.Reviews)
+            .HasForeignKey(b => b.BookId)
             .OnDelete(DeleteBehavior.Cascade);
 
     }

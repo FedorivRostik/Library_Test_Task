@@ -19,7 +19,7 @@ internal class RatingConfiguration : IEntityTypeConfiguration<Rating>
 
         builder.HasOne(b => b.Book)
             .WithMany(b => b.Ratings)
-            .HasForeignKey(b => b.Book.Id)
+            .HasForeignKey(b => b.BookId)
             .OnDelete(DeleteBehavior.Cascade);
 
 

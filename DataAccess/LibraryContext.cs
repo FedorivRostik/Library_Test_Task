@@ -1,20 +1,24 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Entites;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess;
 public class LibraryContext : DbContext
 {
-	public LibraryContext(DbContextOptions<LibraryContext> options) :base(options)
-	{
+    public DbSet<Book> Books { get; set; }
+    public DbSet<Rating> Ratings { get; set; }
+    public DbSet<Review> Reviews { get; set; }
 
-	}
-    protected override void OnModelCreating(ModelBuilder builder)
+    public LibraryContext(DbContextOptions<LibraryContext> options) : base(options)
     {
-        base.OnModelCreating(builder);
 
-        builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
-        builder.Books();
-        builder.Ratings();
-        builder.Reviews();
+    }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+        modelBuilder.Books();
+        modelBuilder.Ratings();
+        modelBuilder.Reviews();
 
     }
 }
