@@ -14,5 +14,6 @@ public static class ApplicationMappersConfiguration
         services.AddScoped<IEnumerableDtoMapper<IEnumerable<Book>, IEnumerable<BookBaseDto>>, BooksBaseListMapper>();
         services.AddScoped<IEnumerableDtoMapper<IEnumerable<Review>, IEnumerable<ReviewBaseDto>>, ReviewToReviewBaseDtoListMapper>();
         services.AddScoped<IDtoMapper<Book, BookBaseDtoWithReviewBaseDto>, BookDtoWithReviewDtoListMapper>();
+        services.AddScoped<IDtoMapper<SaveBookDto, Book>, SaveBookDtoWithBookMapper>();
     }
 }

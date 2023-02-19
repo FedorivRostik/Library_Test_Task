@@ -2,6 +2,7 @@
 using Core.Interfaces.Repositories;
 using Core.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq.Dynamic.Core;
 using System.Reflection;
 using System.Text;
@@ -32,7 +33,7 @@ public class BookRepository : IBookRepository
     {
         var books = _libraryContext.Books.AsQueryable();
 
-        ApplFilter(ref books, queryParameters.genre!);
+        ApplyFilter(ref books, queryParameters.genre!);
         ApplySort(ref books, queryParameters.order!.Split(" ")[0]);
 
         return await books
@@ -59,6 +60,25 @@ public class BookRepository : IBookRepository
 
         return book.Id;
 
+    }
+
+    public async Task<int> CreateBookAsync(Book book)
+    {
+        await _libraryContext.AddAsync(book);
+        await _libraryContext.SaveChangesAsync();
+
+        return book.Id;
+    }
+
+    public async Task<int> UpdateBookAsync(Book book)
+    {
+        var dbBook = await _libraryContext.Books.FirstOrDefaultAsync(x => x.Id == book.Id)!;
+
+        _libraryContext.Books.Entry(dbBook!).State = EntityState.Detached;
+        _libraryContext.Books.Entry(book).State = EntityState.Modified;
+        await _libraryContext.SaveChangesAsync();
+
+        return book.Id;
     }
 
     private void ApplySort(ref IQueryable<Book> books, string orderByQueryString)
@@ -95,7 +115,7 @@ public class BookRepository : IBookRepository
         books = books.OrderBy(orderQuery);
     }
 
-    private void ApplFilter(ref IQueryable<Book> books, string filterQueryString)
+    private void ApplyFilter(ref IQueryable<Book> books, string filterQueryString)
     {
         if (string.IsNullOrWhiteSpace(filterQueryString))
         {

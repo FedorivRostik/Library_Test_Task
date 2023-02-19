@@ -25,7 +25,7 @@ builder.Services.AddApplicationMappers();
 
 // for use service in attributes
 builder.Services.TryAddEnumerable(ServiceDescriptor.Transient
-           <IApplicationModelProvider, ConfigurationModelProvider>());
+ <IApplicationModelProvider, ConfigurationModelProvider>());
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -37,12 +37,7 @@ var app = builder.Build();
 app.AddApplicationMiddleware();
 
 if (app.Environment.IsDevelopment())
-{
-    using (var scope = app.Services.CreateScope())
-    {
-        var dbContext = scope.ServiceProvider.GetRequiredService<LibraryContext>();
-        dbContext.Database.EnsureCreated();
-    }
+{  
     app.UseSwagger();
     app.UseSwaggerUI();
 }

@@ -11,17 +11,23 @@ namespace Application.Services;
 public class BookService : IBookService
 {
     private readonly IBookRepository _bookRepository;
+    private readonly IPictureService _pictureService;
     private readonly IEnumerableDtoMapper<IEnumerable<Book>, IEnumerable<BookBaseDto>> _booksToBaseBooks;
     private readonly IDtoMapper<Book, BookBaseDtoWithReviewBaseDto> _bookToBookBaseDtoWithReviewBaseDto;
+    private readonly IDtoMapper<SaveBookDto, Book> _saveBookDtoToBook;
 
     public BookService(
          IBookRepository bookRepository,
          IEnumerableDtoMapper<IEnumerable<Book>, IEnumerable<BookBaseDto>> booksToBaseBooks,
-        IDtoMapper<Book, BookBaseDtoWithReviewBaseDto> bookToBookBaseDtoWithReviewBaseDto)
+        IDtoMapper<Book, BookBaseDtoWithReviewBaseDto> bookToBookBaseDtoWithReviewBaseDto,
+        IPictureService pictureService,
+        IDtoMapper<SaveBookDto, Book> saveBookDtoToBook)
     {
         _bookRepository = bookRepository;
         _booksToBaseBooks = booksToBaseBooks;
         _bookToBookBaseDtoWithReviewBaseDto = bookToBookBaseDtoWithReviewBaseDto;
+        _pictureService = pictureService;
+        _saveBookDtoToBook = saveBookDtoToBook;
     }
 
     public async Task<List<BookBaseDto>> GetAllBooksAsync(QueryParameters queryParameters)
@@ -69,6 +75,29 @@ public class BookService : IBookService
 
         return deletedId;
     }
+    public async Task<int> SaveBookAsync(SaveBookDto saveBookDto)
+    {
+        int responseId = default(int)!;
+        var Base64 = _pictureService.GetBase64FromFile(saveBookDto.Cover);
+        if (string.IsNullOrEmpty(Base64))
+        {
+            throw new NotFoundException();
+        }
+
+        var bookToSave = _saveBookDtoToBook.Map(saveBookDto);
+        bookToSave.Cover = Base64;
+
+        var book = await _bookRepository.GetBookAsync(bookToSave.Id);
+
+        if (book is null)
+        {
+            responseId = await _bookRepository.CreateBookAsync(bookToSave);
+
+            return responseId;
+        }
+        responseId = await _bookRepository.UpdateBookAsync(bookToSave);
+        return responseId;
+    }
 
     private void IsNull<T>(T obj, int id) where T : BaseEntity
     {
@@ -77,4 +106,5 @@ public class BookService : IBookService
             throw new NotFoundException($"No {typeof(T).Name} with id: {id}.");
         }
     }
+
 }

@@ -4,7 +4,7 @@ using Core.Entities;
 
 namespace Core.Entites;
 
-public class Rating: BaseEntity
+public class Rating : BaseEntity
 {
     public int Score { get; set; }
 

@@ -3,7 +3,7 @@ using Core.Entities;
 
 namespace Core.Entites;
 
-public class Book: BaseEntity
+public class Book : BaseEntity
 {
     public string Title { get; set; } = string.Empty;
     public string Cover { get; set; } = string.Empty;

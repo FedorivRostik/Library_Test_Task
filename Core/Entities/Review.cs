@@ -4,7 +4,7 @@ using Core.Entities;
 
 namespace Core.Entites;
 
-public class Review: BaseEntity
+public class Review : BaseEntity
 {
     public string Message { get; set; } = string.Empty;
     public string Reviewer { get; set; } = string.Empty;

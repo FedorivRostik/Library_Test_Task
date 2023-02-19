@@ -2,6 +2,7 @@
 using Core.Interfaces.Services;
 using Core.Models;
 using Library_Test_Task.FilterAttributes;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json.Linq;
@@ -39,13 +40,22 @@ public class ApiController : ControllerBase
     }
 
     [HttpDelete("books/{id:int:min(1)}")]
-    [CheckSecretKeyAttribute]
-    public async Task<ActionResult<string>> Delete([FromRoute] int id, [BindRequired,FromQuery] string secret)
+    [CheckSecretKey]
+    public async Task<ActionResult<string>> Delete([FromRoute] int id, [BindRequired, FromQuery] string secret)
     {
         var deletedId = await _bookService.DeleteBookAsync(id);
 
         var responseString = new JProperty("id", deletedId).ToString();
 
         return Ok(responseString);
-    }    
+    }
+    [HttpPost("books/save")]
+    public async Task<ActionResult<string>> CreateBookAsync([FromForm] SaveBookDto saveBookDto)
+    {
+        var responseId = await _bookService.SaveBookAsync(saveBookDto);
+
+        var responseString = new JProperty("id", responseId).ToString();
+
+        return Ok(responseString);
+    }
 }

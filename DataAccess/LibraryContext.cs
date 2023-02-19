@@ -10,7 +10,7 @@ public class LibraryContext : DbContext
 
     public LibraryContext(DbContextOptions<LibraryContext> options) : base(options)
     {
-
+        Database.EnsureCreated();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
