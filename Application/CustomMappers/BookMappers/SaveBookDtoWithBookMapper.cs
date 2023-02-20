@@ -8,7 +8,7 @@ public class SaveBookDtoWithBookMapper : IDtoMapper<SaveBookDto, Book>
     public Book Map(SaveBookDto source)
     {
 
-        var exceptionViewModel = new Book()
+        var mapped = new Book()
         {
             Id = source.Id,
             Title = source.Title,
@@ -17,7 +17,7 @@ public class SaveBookDtoWithBookMapper : IDtoMapper<SaveBookDto, Book>
             Genre = source.Genre,
         };
 
-        return exceptionViewModel;
+        return mapped;
 
     }
 }

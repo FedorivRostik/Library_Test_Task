@@ -15,7 +15,7 @@ public class BookDtoWithReviewDtoListMapper : IDtoMapper<Book, BookBaseDtoWithRe
 
     public BookBaseDtoWithReviewBaseDto Map(Book source)
     {
-        var exceptionViewModel = new BookBaseDtoWithReviewBaseDto()
+        var mapped = new BookBaseDtoWithReviewBaseDto()
         {
             Id = source.Id,
             Title = source.Title,
@@ -26,6 +26,6 @@ public class BookDtoWithReviewDtoListMapper : IDtoMapper<Book, BookBaseDtoWithRe
             Reviews = _reviewsToReviewsList.Map(source.Reviews).ToList()
         };
 
-        return exceptionViewModel;
+        return mapped;
     }
 }

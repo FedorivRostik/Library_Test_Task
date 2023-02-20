@@ -1,5 +1,7 @@
 ﻿using Application.CustomMappers.Interfaces;
 using Core.Dtos.Books;
+using Core.Dtos.Rates;
+using Core.Dtos.Reviews;
 using Core.Entites;
 using Core.Entities;
 using Core.Exceptions;
@@ -15,19 +17,24 @@ public class BookService : IBookService
     private readonly IEnumerableDtoMapper<IEnumerable<Book>, IEnumerable<BookBaseDto>> _booksToBaseBooks;
     private readonly IDtoMapper<Book, BookBaseDtoWithReviewBaseDto> _bookToBookBaseDtoWithReviewBaseDto;
     private readonly IDtoMapper<SaveBookDto, Book> _saveBookDtoToBook;
-
+    private readonly IDtoMapper<ReviewSaveDto, Review> _saveReviewDtoToReview;
+    private readonly IDtoMapper<RateSaveDto, Rating> _rateSaveDtoToRating;
     public BookService(
          IBookRepository bookRepository,
          IEnumerableDtoMapper<IEnumerable<Book>, IEnumerable<BookBaseDto>> booksToBaseBooks,
         IDtoMapper<Book, BookBaseDtoWithReviewBaseDto> bookToBookBaseDtoWithReviewBaseDto,
         IPictureService pictureService,
-        IDtoMapper<SaveBookDto, Book> saveBookDtoToBook)
+        IDtoMapper<SaveBookDto, Book> saveBookDtoToBook,
+        IDtoMapper<ReviewSaveDto, Review> saveReviewDtoToReview,
+         IDtoMapper<RateSaveDto, Rating> rateSaveDtoToRating)
     {
         _bookRepository = bookRepository;
         _booksToBaseBooks = booksToBaseBooks;
         _bookToBookBaseDtoWithReviewBaseDto = bookToBookBaseDtoWithReviewBaseDto;
         _pictureService = pictureService;
         _saveBookDtoToBook = saveBookDtoToBook;
+        _saveReviewDtoToReview = saveReviewDtoToReview;
+        _rateSaveDtoToRating = rateSaveDtoToRating;
     }
 
     public async Task<List<BookBaseDto>> GetAllBooksAsync(QueryParameters queryParameters)
@@ -77,7 +84,7 @@ public class BookService : IBookService
     }
     public async Task<int> SaveBookAsync(SaveBookDto saveBookDto)
     {
-        int responseId = default(int)!;
+        int responseId;
         var Base64 = _pictureService.GetBase64FromFile(saveBookDto.Cover);
         if (string.IsNullOrEmpty(Base64))
         {
@@ -98,6 +105,19 @@ public class BookService : IBookService
         responseId = await _bookRepository.UpdateBookAsync(bookToSave);
         return responseId;
     }
+    public async Task<int> AddReviewToBookAsync(ReviewSaveDto reviewSaveDto, int id)
+    {
+        var mapped = _saveReviewDtoToReview.Map(reviewSaveDto);
+        int responseId = await _bookRepository.AddReviewToBookAsync(mapped, id);
+        return responseId;
+    }
+
+    public async Task<int> AddRateToBookAsync(RateSaveDto rateSaveDto, int id)
+    {
+        var mapped = _rateSaveDtoToRating.Map(rateSaveDto);
+        int responseId = await _bookRepository.AddRateToBookAsync(mapped, id);
+        return responseId;
+    }
 
     private void IsNull<T>(T obj, int id) where T : BaseEntity
     {
@@ -106,5 +126,4 @@ public class BookService : IBookService
             throw new NotFoundException($"No {typeof(T).Name} with id: {id}.");
         }
     }
-
 }

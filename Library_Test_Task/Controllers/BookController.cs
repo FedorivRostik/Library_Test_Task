@@ -1,4 +1,6 @@
 ﻿using Core.Dtos.Books;
+using Core.Dtos.Rates;
+using Core.Dtos.Reviews;
 using Core.Interfaces.Services;
 using Core.Models;
 using Library_Test_Task.FilterAttributes;
@@ -53,6 +55,25 @@ public class ApiController : ControllerBase
     public async Task<ActionResult<string>> CreateBookAsync([FromForm] SaveBookDto saveBookDto)
     {
         var responseId = await _bookService.SaveBookAsync(saveBookDto);
+
+        var responseString = new JProperty("id", responseId).ToString();
+
+        return Ok(responseString);
+    }
+    [HttpPut("books/{id:int:min(1)}/review")]
+    public async Task<ActionResult<string>> AddReviewToBookAsync([FromRoute] int id, [FromForm] ReviewSaveDto reviewSaveDto)
+    {
+        var responseId = await _bookService.AddReviewToBookAsync(reviewSaveDto, id);
+
+        var responseString = new JProperty("id", responseId).ToString();
+
+        return Ok(responseString);
+    }
+
+    [HttpPut("books/{id:int:min(1)}/rate")]
+    public async Task<ActionResult<string>> AddReviewToBookAsync([FromRoute] int id, [FromForm] RateSaveDto rateSaveDto)
+    {
+        var responseId = await _bookService.AddRateToBookAsync(rateSaveDto, id);
 
         var responseString = new JProperty("id", responseId).ToString();
 

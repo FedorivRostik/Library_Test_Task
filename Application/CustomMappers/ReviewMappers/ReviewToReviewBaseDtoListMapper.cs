@@ -7,19 +7,19 @@ public class ReviewToReviewBaseDtoListMapper : IEnumerableDtoMapper<IEnumerable<
 {
     public IEnumerable<ReviewBaseDto> Map(IEnumerable<Review> source)
     {
-        var bookBaseDtos = source.Select(MapFromTo).ToList();
-        return bookBaseDtos;
+        var mapped = source.Select(MapFromTo).ToList();
+        return mapped;
     }
 
     private ReviewBaseDto MapFromTo(Review review)
     {
-        var exceptionViewModel = new ReviewBaseDto()
+        var mapped = new ReviewBaseDto()
         {
             Id = review.Id,
             Message = review.Message,
             Reviewer = review.Reviewer
         };
 
-        return exceptionViewModel;
+        return mapped;
     }
 }

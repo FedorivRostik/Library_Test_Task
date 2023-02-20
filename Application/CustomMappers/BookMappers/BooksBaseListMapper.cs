@@ -7,13 +7,13 @@ public class BooksBaseListMapper : IEnumerableDtoMapper<IEnumerable<Book>, IEnum
 {
     public IEnumerable<BookBaseDto> Map(IEnumerable<Book> source)
     {
-        var bookBaseDtos = source.Select(MapFromTo).ToList();
-        return bookBaseDtos;
+        var mapped = source.Select(MapFromTo).ToList();
+        return mapped;
     }
 
     private BookBaseDto MapFromTo(Book book)
     {
-        var exceptionViewModel = new BookBaseDto()
+        var mapped = new BookBaseDto()
         {
             Id = book.Id,
             Title = book.Title,
@@ -22,6 +22,6 @@ public class BooksBaseListMapper : IEnumerableDtoMapper<IEnumerable<Book>, IEnum
             ReviewNumber = book.Reviews.Any() ? book.Reviews.Count() : 0.0m
         };
 
-        return exceptionViewModel;
+        return mapped;
     }
 }

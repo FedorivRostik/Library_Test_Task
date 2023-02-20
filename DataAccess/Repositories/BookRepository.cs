@@ -81,6 +81,24 @@ public class BookRepository : IBookRepository
         return book.Id;
     }
 
+    public async Task<int> AddReviewToBookAsync(Review review, int id)
+    {
+        review.BookId = id;
+        await _libraryContext.AddAsync(review);
+        await _libraryContext.SaveChangesAsync();
+
+        return review.Id;
+    }
+
+    public async Task<int> AddRateToBookAsync(Rating rating, int id)
+    {
+        rating.BookId = id;
+        await _libraryContext.AddAsync(rating);
+        await _libraryContext.SaveChangesAsync();
+
+        return rating.Id;
+    }
+
     private void ApplySort(ref IQueryable<Book> books, string orderByQueryString)
     {
         if (string.IsNullOrWhiteSpace(orderByQueryString))
