@@ -36,6 +36,7 @@ builder.Services.AddDbContext<LibraryContext>(o => o.UseInMemoryDatabase("Librar
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseMiddleware<RequestLoggingMiddleware>();
 app.AddApplicationMiddleware();
 
 if (app.Environment.IsDevelopment())
