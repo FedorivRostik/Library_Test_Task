@@ -3,6 +3,7 @@ using Application.CustomMappers;
 using DataAccess;
 using Library_Test_Task.Middleware;
 using Library_Test_Task.Providers;
+using Library_Test_Task.Validators;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -21,9 +22,10 @@ builder.Services.AddControllers(options =>
 builder.Services.AddApplicationServices();
 builder.Services.AddDataAccessServicesConfiguration();
 builder.Services.AddApplicationMappers();
+builder.Services.ConfigureFluentValidation();
+builder.Services.AddCustomValidators();
 
-
-// for use service in attributes
+// for use feel props in attributes
 builder.Services.TryAddEnumerable(ServiceDescriptor.Transient
  <IApplicationModelProvider, ConfigurationModelProvider>());
 
@@ -37,7 +39,7 @@ var app = builder.Build();
 app.AddApplicationMiddleware();
 
 if (app.Environment.IsDevelopment())
-{  
+{
     app.UseSwagger();
     app.UseSwaggerUI();
 }
